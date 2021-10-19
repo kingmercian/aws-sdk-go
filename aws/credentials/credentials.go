@@ -83,6 +83,9 @@ type Value struct {
 
 	// Provider used to get credentials
 	ProviderName string
+
+	// AWS Session Expiry
+	SessionExpiry string
 }
 
 // HasKeys returns if the credentials Value has both AccessKeyID and

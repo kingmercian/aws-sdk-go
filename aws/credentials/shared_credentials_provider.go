@@ -102,7 +102,7 @@ func loadProfile(filename, profile string) (Value, error) {
 	}
 
 	expiry := iniProfile.String("fed_expire")
-	if len(secret) == 0 {
+	if len(expiry) == 0 {
 		return Value{ProviderName: SharedCredsProviderName}, awserr.New("SharedCredsExpiry",
 			fmt.Sprintf("shared credentials %s in %s did not contain fed_expire", profile, filename),
 			nil)
