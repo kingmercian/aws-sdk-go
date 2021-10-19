@@ -87,27 +87,35 @@ func loadProfile(filename, profile string) (Value, error) {
 		return Value{ProviderName: SharedCredsProviderName}, awserr.New("SharedCredsLoad", "failed to get profile", nil)
 	}
 
-	id := iniProfile.String("aws_access_key_id")
+	id := iniProfile.String("fed_aws_access_key_id")
 	if len(id) == 0 {
 		return Value{ProviderName: SharedCredsProviderName}, awserr.New("SharedCredsAccessKey",
 			fmt.Sprintf("shared credentials %s in %s did not contain aws_access_key_id", profile, filename),
 			nil)
 	}
 
-	secret := iniProfile.String("aws_secret_access_key")
+	secret := iniProfile.String("fed_aws_secret_access_key")
 	if len(secret) == 0 {
 		return Value{ProviderName: SharedCredsProviderName}, awserr.New("SharedCredsSecret",
 			fmt.Sprintf("shared credentials %s in %s did not contain aws_secret_access_key", profile, filename),
 			nil)
 	}
+	
+	secret := iniProfile.String("fed_expire")
+	if len(secret) == 0 {
+		return Value{ProviderName: SharedCredsProviderName}, awserr.New("SharedCredsSecret",
+			fmt.Sprintf("shared credentials %s in %s did not contain fed_expire", profile, filename),
+			nil)
+	}
 
 	// Default to empty string if not found
-	token := iniProfile.String("aws_session_token")
+	token := iniProfile.String("fed_aws_session_token")
 
 	return Value{
 		AccessKeyID:     id,
 		SecretAccessKey: secret,
 		SessionToken:    token,
+		SessionExpiry:   expiry,
 		ProviderName:    SharedCredsProviderName,
 	}, nil
 }
